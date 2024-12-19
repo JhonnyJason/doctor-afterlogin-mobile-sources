@@ -8,11 +8,7 @@ import { createLogFunctions } from "thingy-debug"
 import dayjs from "dayjs"
 
 ############################################################
-import { requestSharesURL } from "./configmodule.js"
-import { sampleData } from "./sampledata.js"
-## TODO introduce more sampleData e.g. patientSampleData
-
-import { dataLoadPageSize } from "./configmodule.js"
+import { requestSharesURL, dataLoadPageSize } from "./configmodule.js"
 
 ############################################################
 StudyToEntry = {}
@@ -21,8 +17,8 @@ PatientToEntry = {}
 ############################################################
 #region merge Properties Functions
 mergeIsNew = (obj, share) ->
-    return true if obj.isNew? and share.isNew and share.isNew != "false"
-    return false
+    shareIsNew = share.isNew? and share.isNew and share.isNew != false
+    return obj.isNew or shareIsNew
 
 mergePatientId = (obj, share) ->
     return share.patientId

@@ -3,7 +3,6 @@ module.exports = {
         return {
             "dayjs": "^1.11.13",
             "gridjs": "^6.0.6",
-            // "gridjs-selection": "^4.0.0",
 	        "thingy-byte-utils":"^0.0.8"
         }
     }
