@@ -7,9 +7,9 @@ indexdomconnect.initialize = () ->
     global.forwardingLink = document.getElementById("forwarding-link")
     global.backButton = document.getElementById("back-button")
     global.patientNameIndication = document.getElementById("patient-name-indication")
-    global.loadcontrols = document.getElementById("loadcontrols")
-    global.refreshButton = document.getElementById("refresh-button")
-    global.chooseDateLimit = document.getElementById("choose-date-limit")
+    global.patientDobIndication = document.getElementById("patient-dob-indication")
+    global.searchButton = document.getElementById("search-button")
+    global.cancelSearchButton = document.getElementById("cancel-search-button")
     return
     
 module.exports = indexdomconnect

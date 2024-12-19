@@ -3,10 +3,15 @@ button-size = 22px
 
 @import '../../../node_modules/gridjs/dist/theme/mermaid.css'
 
-.girdjs-search
-    transition: transform 0.3s
-.gridjs-search-input
-    width 220px
+.gridjs-head
+    padding 5px 0
+
+.gridjs-search
+    // transition: transform 0.3s
+    float: none
+
+input.gridjs-search-input
+    width 100%
 
 #overviewtable
     position relative
@@ -66,8 +71,8 @@ th.gridjs-th
     text-overflow: ellipsis
 
 
-table.gridjs-table
-    min-width: 1480px
+// table.gridjs-table
+//     min-width: 1480px
 
 .gridjs-wrapper
     border-radius: 4px 4px 0 0 
@@ -103,6 +108,33 @@ td.gridjs-td
         list-style-image url("img/icon_bild.gif")
         padding-left 15px
 
+    ul.documents
+        list-style none
+        padding-left 20px
+        li
+            position relative
+            overflow: visible
+            line-height: 26px
+    li.bild::before
+        content ""
+        display block    
+        background-image url("img/icon_bild.gif")
+        position: absolute
+        top 3px
+        left -20px
+        height 16px
+        width 16px
+    
+    li.befund::before
+        content ""
+        display block    
+        background-image url("img/document_certificate.png")
+        position: absolute
+        top 0
+        left -20px
+        height 16px
+        width 16px
+
 .click-button
 .click-button:hover
     overflow: hidden
@@ -117,6 +149,7 @@ td.gridjs-td
     border-radius: 50%
     border solid 1px #999
     background-color: #eee
+    margin auto
 
 .isNewDot.isNew
     border-color #449900
@@ -126,9 +159,13 @@ td.gridjs-td
 // isNew indicator
 th.gridjs-th:nth-child(1) 
 td.gridjs-td:nth-child(1)
-    width 20px !important
-    min-width 20px !important
-    max-width 20px !important
+    width 26px !important
+    min-width 26px !important
+    max-width 26px !important
+    padding-left 0
+    padding-right 0
+    text-align: center
+
 // Name
 th.gridjs-th:nth-child(2) 
 td.gridjs-td:nth-child(2) 
@@ -136,140 +173,49 @@ td.gridjs-td:nth-child(2)
     min-width auto !important
     max-width 300px !important
 
-
-//SVNR
-th.gridjs-th:nth-child(3) 
-td.gridjs-td:nth-child(3) 
-    width 75px !important
-    min-width 75px !important
-    max-width 75px !important
-    text-align: center
-td.gridjs-td:nth-child(3) 
-    font-size 11pt
-
 // Geb.-Datum
-th.gridjs-th:nth-child(4) 
-td.gridjs-td:nth-child(4)
-    width 122px !important
-    min-width 122px !important
-    max-width 122px !important
-
-// Befunde
-th.gridjs-th:nth-child(5) 
-td.gridjs-td:nth-child(5)
-    width 220px !important
-    min-width 220px !important
-    max-width 220px !important
-
-// Bilder
-th.gridjs-th:nth-child(6) 
-td.gridjs-td:nth-child(6)
-    width auto !important
-    min-width auto !important
-    max-width auto !important
-
-// Unt.-Datum
-th.gridjs-th:nth-child(7) 
-td.gridjs-td:nth-child(7)
+th.gridjs-th:nth-child(3) 
+td.gridjs-td:nth-child(3)
+    width 114px !important
+    min-width 114px !important
+    max-width 114px !important
     text-align: center
-    width 122px !important
-    min-width 122px !important
-    max-width 122px !important
-
-// Radiologie
-th.gridjs-th:nth-child(8) 
-td.gridjs-td:nth-child(8)
-    width auto !important
-    min-width auto !important
-    max-width auto !important
-
-// Zustellungsdatum
-th.gridjs-th:nth-child(9) 
-td.gridjs-td:nth-child(9)
-    text-align: center
-    width 180px !important
-    min-width 180px !important
-    max-width 180px !important
-
+    font-size: 11pt
 
 
 // Patient Table State ------------------------------
 
-.entries-selected
-    .patient-table
-        .gridjs-search
-            transform translateX(calc(100vw - 370px)) !important
-
-.patient-table.go-back
-    .gridjs-search
-        float none
-        animation slide-to-left 0.2s ease-in forwards
+// .patient-table.go-back
+//     .gridjs-search
+//         transform translateX(0)
 
 .patient-table
     .gridjs-search
-        float none
-        animation slide-to-right 0.2s ease-in forwards
+        transform translateX(102vw)
+
+.patient-table.search
+    .gridjs-search
+        transform translateX(50px)
+        width 190px
+
     // .gridjs-search-input
     //     animation slide-to-right 0.2s ease-in forwards
     // .gridjs-search-input.go-back
         
-    table.gridjs-table
-        min-width: 920px
+    // table.gridjs-table
+    //     min-width: 920px
 
-    // Befunde
+    // Documents
     th.gridjs-th:nth-child(2) 
     td.gridjs-td:nth-child(2)
-        width 220px !important
-        min-width 220px !important
-        max-width 220px !important
+        width auto !important
+        min-width auto !important
+        max-width auto !important
         text-align: left
 
-    // Bilder
+    // forward
     th.gridjs-th:nth-child(3) 
     td.gridjs-td:nth-child(3)
-        width auto !important
-        min-width auto !important
-        max-width auto !important
-        text-align: left
-
-    // Unt.-Datum
-    th.gridjs-th:nth-child(4) 
-    td.gridjs-td:nth-child(4)
-        width 122px !important
-        min-width 122px !important
-        max-width 122px !important
-        text-align: center
-
-    // Radiologie
-    th.gridjs-th:nth-child(5) 
-    td.gridjs-td:nth-child(5)
-        width auto !important
-        min-width auto !important
-        max-width auto !important
-        text-align: left
-
-    th.gridjs-th:nth-child(6) 
-    td.gridjs-td:nth-child(6)
-        width 60px !important
-        min-width 60px !important
-        max-width 60px !important
-        text-align: center
-
-
-.patient-table.privileged
-
-    table.gridjs-table
-        min-width: 1162px
-
-    th.gridjs-th:nth-child(6) 
-    td.gridjs-td:nth-child(6)
-        width auto !important
-        min-width auto !important
-        max-width auto !important
-        text-align: left
-
-    th.gridjs-th:nth-child(7) 
-    td.gridjs-td:nth-child(7)
         width 60px !important
         min-width 60px !important
         max-width 60px !important

@@ -16,7 +16,7 @@ import dayjs from "dayjs"
 ############################################################
 PATIENTID_CELL = 0
 ISNEW_CELL = 1
-DOBSTANDARD_CELL = 4
+DOBSTANDARD_CELL = 3
 
 ############################################################
 #region germanLanguage
@@ -51,35 +51,6 @@ deDE = {
 ############################################################
 entryBaseURL = "https://www.bilder-befunde.at/webview/index.php?value_dfpk="
 messageTarget = null
-
-## datamodel default entry
-# | Bilder Button | Befunde Button | Untersuchungsdatum | Patienten Name (Fullname) | SSN (4 digits) | Geb.Datum | Untersuchungsbezeichnung | Radiologie | Zeitstempel (Datum + Uhrzeit) |
-
-## datamodel checkbox entry
-# | checkbox | hidden index | Untersuchungsdatum | Patienten Name (Fullname) | SSN (4 digits) | Geb.Datum | Untersuchungsbezeichnung | Radiologie | Zeitstempel (Datum + Uhrzeit) |
-
-## datamodel doctor selection entry
-# | checkbox | doctorName | 
-
-############################################################
-#region internalFunctions
-
-############################################################
-# onLinkClick = (el) ->
-#     evnt = window.event
-#     # console.log("I got called!")
-#     # console.log(evnt)
-#     evnt.preventDefault()
-#     ## TODO send right message
-#     href = el.getAttribute("href")
-#     ## TODO send right message
-#     # window.open("mainwindow.html", messageTarget.name)
-#     if messageTarget.closed then messageTarget = window.open("mainwindow.html", messageTarget.name)
-#     else window.open("", messageTarget.name)
-#     messageTarget.postMessage(href)
-#     # messageTarget.focus()
-#     # window.blur()
-#     return
 
 ############################################################
 #region sort functions
@@ -161,6 +132,29 @@ befundeFormatter = (content , row) ->
     innerHTML += "</ul>"
     return html(innerHTML)
 
+documentsFormatter = (content , row) ->
+    return "" unless content?
+    # log typeof content
+    innerHTML = "<ul class='documents'>"
+
+    lines = content.split(" : ")
+    for line in lines when line.length > 3
+        params = line.split(" . ")
+        if params.length != 4 then throw new Error("Error in Merged Bilder parameter! '#{content}'")
+        # document = {
+        #     description: params[0],
+        #     url: params[1],
+        #     isNew: params[2] == "1"
+        #     type: params[3] == "bild" || "befund"
+        # }
+        if params[2] == "1"
+            innerHTML += "<li class='#{params[3]}'><b><a href='#{params[1]}'> #{params[0]}</a></b></li>"
+        else
+            innerHTML += "<li class='#{params[3]}'><a href='#{params[1]}'> #{params[0]}</a></li>"
+
+    innerHTML += "</ul>"
+    return html(innerHTML)
+
 screeningDateFormatter = (content, row) ->
     return content.format("DD.MM.YYYY")
 
@@ -224,10 +218,7 @@ export getTableHeight = ->
     nonTableOffset = 0
     if !tableWrapper? # table does not exist yet
         # so take the height which should be enough
-        if fullWidth <= 570
-            nonTableOffset = 189 # mobile 
-        else
-            nonTableOffset = 114 
+        nonTableOffset = 114 
     else 
         nonTableOffset += tableWrapper.offsetTop
         nonTableOffset += gridJSFooter.offsetHeight
@@ -272,6 +263,13 @@ befundeHeadObj = {
     name: "Befunde"
     id: "befunde"
     formatter: befundeFormatter
+    sort: false
+}
+
+documentsHeadObj = {
+    name: "Dokumente"
+    id: "documents"
+    formatter: documentsFormatter
     sort: false
 }
 
@@ -334,13 +332,13 @@ forwardHeadObj = {
 #endregion
 
 export getStandardColumnObjects = (state) ->
-    return [patientIdHeadObj, isNewHeadObj, nameHeadObj, svnHeadObj, birthdayHeadObj, befundeHeadObj, bilderHeadObj, screeningDateHeadObj, radiologistHeadObj, sendingDateHeadObj]
+    return [patientIdHeadObj, isNewHeadObj, nameHeadObj, birthdayHeadObj]
 
 export getPatientsColumnObjects = (state) ->
-    return [studyIdHeadObj, isNewHeadObj, befundeHeadObj, bilderHeadObj, screeningDateHeadObj, radiologistHeadObj, forwardHeadObj]
+    return [studyIdHeadObj, isNewHeadObj, documentsHeadObj]
 
-export getExtendedPatientsColumnObjects = (state) ->
-    return [studyIdHeadObj, isNewHeadObj, befundeHeadObj, bilderHeadObj, screeningDateHeadObj, radiologistHeadObj, sharedToHeadObj, forwardHeadObj]
+# export getExtendedPatientsColumnObjects = (state) ->
+#     return [studyIdHeadObj, isNewHeadObj, befundeHeadObj, bilderHeadObj, screeningDateHeadObj, radiologistHeadObj, sharedToHeadObj, forwardHeadObj]
 
 ############################################################
 export getLanguageObject = -> return deDE
@@ -353,11 +351,5 @@ export getLanguagObjectWithMinDate = (minDate) ->
     newObj.noRecordsFound = newNoRecordsString
     return newObj
 
-# ############################################################
-# export changeLinksToMessageSent = (target) ->
-#     # console.log("I have a target opener!")
-#     messageTarget = target
-#     window.onLinkClick = onLinkClick
-#     return
 
 #endregion

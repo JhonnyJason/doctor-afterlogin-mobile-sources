@@ -21,7 +21,7 @@ PatientToEntry = {}
 ############################################################
 #region merge Properties Functions
 mergeIsNew = (obj, share) ->
-    return true if obj.isNew or share.isNew or share.isNew == "true"
+    return true if obj.isNew? and share.isNew and share.isNew != "false"
     return false
 
 mergePatientId = (obj, share) ->
@@ -95,7 +95,8 @@ mergeBefunde = (obj, share) ->
     return result unless share.documentUrl?
 
     if !(share.formatType == 4 or share.formatType == "4")
-        if share.isNew? then isNew = 1 else isNew = 0
+        if share.isNew? and share.isNew and share.isNew != "false" then isNew = 1 
+        else isNew = 0
         result += "#{share.documentDescription} . #{share.documentUrl} . #{isNew} : "
 
     return result
@@ -106,8 +107,24 @@ mergeImages = (obj, share) ->
     return result unless share.documentUrl?
 
     if (share.formatType == 4 or share.formatType == "4")
-        if share.isNew? then isNew = 1 else isNew = 0
+        if share.isNew? and share.isNew and share.isNew != "false" then isNew = 1 
+        else isNew = 0
         result += "#{share.documentDescription} . #{share.documentUrl} . #{isNew} : "
+
+    return result
+
+mergeDocuments = (obj, share) ->
+    result = obj.documents
+    result = "" unless result?
+    return result unless share.documentUrl?
+
+    if share.isNew? and share.isNew and share.isNew != "false" then isNew = 1 
+    else isNew = 0
+
+    if (share.formatType == 4 or share.formatType == "4")
+        result += "#{share.documentDescription} . #{share.documentUrl} . #{isNew} . bild : "
+    else
+        result += "#{share.documentDescription} . #{share.documentUrl} . #{isNew} . befund : "
 
     return result
 
@@ -165,19 +182,19 @@ groudByStudyId = (data) ->
         obj = {}
         for shareId,share of entry
             obj.isNew = mergeIsNew(obj, share)
-            obj.studyDate = mergeStudyDate(obj, share)
+            # obj.studyDate = mergeStudyDate(obj, share)
             obj.patientId = mergePatientId(obj, share)
             obj.patientFullName = mergePatientFullname(obj, share)
-            obj.patientSsn = mergePatientSsn(obj, share)
+            # obj.patientSsn = mergePatientSsn(obj, share)
             obj.patientDob = mergePatientDob(obj, share)
             # obj.studyDescription = mergeStudyDescription(obj, share)
-            obj.fromFullName = mergeCreatedBy(obj, share)
+            # obj.fromFullName = mergeCreatedBy(obj, share)
             obj.createdAt = mergeDateCreated(obj, share)
-            # obj.documents = mergeDocuments(obj,share)
-            obj.befunde = mergeBefunde(obj,share)
-            obj.images = mergeImages(obj,share)
-            obj.forward = mergeForward(obj,share)
-            obj.sharedTo = mergeSharedTo(obj, share)
+            obj.documents = mergeDocuments(obj,share)
+            # obj.befunde = mergeBefunde(obj,share)
+            # obj.images = mergeImages(obj,share)
+            # obj.forward = mergeForward(obj,share)
+            # obj.sharedTo = mergeSharedTo(obj, share)
             obj.select = false
             obj.studyId = key
             obj.index = results.length
@@ -188,7 +205,6 @@ groudByStudyId = (data) ->
     log "mapping took: "+diff+"ms"
     
     return results
-
 
 groudByPatientId = (data) ->
     ## TODO improve caching of Cases
@@ -208,17 +224,17 @@ groudByPatientId = (data) ->
         obj = {}
         for shareId,share of entry
             obj.isNew = mergeIsNew(obj, share)
-            obj.studyDate = mergeStudyDate(obj, share)
+            # obj.studyDate = mergeStudyDate(obj, share)
             obj.studyId = mergeStudyId(obj, share)
             obj.patientFullName = mergePatientFullname(obj, share)
-            obj.patientSsn = mergePatientSsn(obj, share)
+            # obj.patientSsn = mergePatientSsn(obj, share)
             obj.patientDob = mergePatientDob(obj, share)
             # obj.studyDescription = mergeStudyDescription(obj, share)
-            obj.fromFullName = mergeCreatedBy(obj, share)
+            # obj.fromFullName = mergeCreatedBy(obj, share)
             obj.createdAt = mergeDateCreated(obj, share)
-            # obj.documents = mergeDocuments(obj,share)
-            obj.befunde = mergeBefunde(obj,share)
-            obj.images = mergeImages(obj,share)
+            obj.documents = mergeDocuments(obj,share)
+            # obj.befunde = mergeBefunde(obj,share)
+            # obj.images = mergeImages(obj,share)
             obj.select = false
             obj.patientId = key
             obj.index = results.length

@@ -15,7 +15,7 @@ import { retrieveData } from "./datamodule.js"
 ############################################################
 import * as S from "./statemodule.js"
 import * as utl from "./tableutils.js"
-import * as loadcontrols from "./loadcontrolsmodule.js"
+import * as header from "./headermodule.js"
 import * as dataModule from "./datamodule.js"
 import {
     tableRenderCycleMS, searchDebounceMS, forwardBaseURL 
@@ -200,9 +200,10 @@ renderTable = (dataPromise) ->
 renderPatientTable = (dataPromise) ->
     log "renderPatientTable"
     
-    if useExtendedPatientTable then columns = utl.getExtendedPatientsColumnObjects() 
-    else columns = utl.getPatientsColumnObjects()
+    # if useExtendedPatientTable then columns = utl.getExtendedPatientsColumnObjects() 
+    # else columns = utl.getPatientsColumnObjects()
 
+    columns = utl.getPatientsColumnObjects()
     data = -> dataPromise
     language = utl.getLanguageObject()
     search = true
@@ -380,8 +381,9 @@ gridSearchByString = (name) ->
 selectPatient = (selectedPatientId, selectedPatientName, selectedDateOfBirth) ->
     log "selectPatient #{selectedPatientId},#{selectedPatientName},#{selectedDateOfBirth}"
     patientId = selectedPatientId
-    patientString = "#{selectedPatientName}, #{selectedDateOfBirth}"
-    loadcontrols.setPatientString(patientString)
+    # patientString = "#{selectedPatientName}, #{selectedDateOfBirth}"
+    # header.setPatientString(patientString)
+    header.indicatePatient(selectedPatientName, selectedDateOfBirth)
     setPatientSelectedState()
     return
     
@@ -411,20 +413,39 @@ export refresh = ->
     setDefaultState()
     return 
 
+
 export backFromPatientTable = ->
     log "backFromPatientTable"
     dataModule.invalidatePatientData()
-    navigatingBack = true
-    overviewtable.classList.add("go-back")
-    forwardingHRef = ""
-    updateForwarderLink()
+    # navigatingBack = true
+    # overviewtable.classList.add("go-back")
+    # forwardingHRef = ""
+    # updateForwarderLink()
+
+    setDefaultState()
     return
+
+
+export startPatientSearch = ->
+    overviewtable.classList.add("search")
+    gridJSSearchInput = document.getElementsByClassName("gridjs-search-input")[0]
+    if gridJSSearchInput? then gridJSSearchInput.focus()
+    return
+
+export cancelPatientSearch = ->
+    overviewtable.classList.remove("search")
+    gridJSSearchInput = document.getElementsByClassName("gridjs-search-input")[0]
+    if gridJSSearchInput? then gridJSSearchInput.blur()
+    return
+
+
 ############################################################
 #region set to state Functions
 export setDefaultState = ->
     log "setDefaultState"
     overviewtable.classList.remove("patient-table")
-    overviewtable.classList.remove("go-back")
+    overviewtable.classList.remove("search")
+    # overviewtable.classList.remove("go-back")
 
     # this is when we want to destroy the table completely
 
